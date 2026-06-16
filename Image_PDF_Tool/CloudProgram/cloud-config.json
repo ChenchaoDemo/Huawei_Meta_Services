@@ -1,0 +1,22 @@
+{
+  "appSelected": {
+    "appId": "6917608331379618002",
+    "appName": "图片转PDF工具箱",
+    "deviceTypes": [
+      {
+        "deviceType": 4
+      },
+      {
+        "deviceType": 5
+      }
+    ],
+    "enableSites": "CN",
+    "installationFree": 1,
+    "packageType": 7,
+    "projectId": "99536292102122194",
+    "projectName": "推送",
+    "siteId": "CN"
+  },
+  "teamId": "70086000324139055",
+  "uid": "70086000324139055"
+}
