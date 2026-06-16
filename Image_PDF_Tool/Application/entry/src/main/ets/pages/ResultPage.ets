@@ -5,6 +5,7 @@ import { EmptyView } from '../components/EmptyView';
 import { PdfRecordModel } from '../model/PdfRecordModel';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { FileSaveService } from '../service/FileSaveService';
+import { PdfResultActionService } from '../service/PdfResultActionService';
 import { RecordStorageService } from '../service/RecordStorageService';
 import { SizeUtil } from '../utils/SizeUtil';
 import { DateUtil } from '../utils/DateUtil';
@@ -14,6 +15,7 @@ import { ToastUtil } from '../utils/ToastUtil';
 @Component
 export struct ResultPage {
   @Consume('pathStack') pathStack: NavPathStack;
+  @Consume('recordRefreshVersion') recordRefreshVersion: number;
   @State hasRecord: boolean = false;
   @State record: PdfRecordModel = {
     id: '',
@@ -24,6 +26,8 @@ export struct ResultPage {
     createTime: 0
   };
   @State saving: boolean = false;
+  @State previewing: boolean = false;
+  @State sharing: boolean = false;
 
   aboutToAppear(): void {
     const currentRecord = ConvertSessionService.getRecord();
@@ -35,12 +39,34 @@ export struct ResultPage {
     }
   }
 
-  private previewPdf(): void {
-    ToastUtil.show('PDF 已生成，可在保存路径中查看');
+  private async previewPdf(): Promise<void> {
+    if (!this.hasRecord || this.previewing) {
+      return;
+    }
+    this.previewing = true;
+    try {
+      const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      await PdfResultActionService.previewPdf(context, this.record);
+    } catch (err) {
+      ToastUtil.show((err as Error).message || '预览失败');
+    } finally {
+      this.previewing = false;
+    }
   }
 
-  private sharePdf(): void {
-    ToastUtil.show('分享能力需接入系统分享面板，当前文件已保存在沙箱目录');
+  private async sharePdf(): Promise<void> {
+    if (!this.hasRecord || this.sharing) {
+      return;
+    }
+    this.sharing = true;
+    try {
+      const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      await PdfResultActionService.sharePdf(context, this.record);
+    } catch (err) {
+      ToastUtil.show((err as Error).message || '分享失败');
+    } finally {
+      this.sharing = false;
+    }
   }
 
   private async saveToLocal(): Promise<void> {
@@ -55,6 +81,7 @@ export struct ResultPage {
       ConvertSessionService.setRecord(saved);
       await RecordStorageService.addRecord(context, saved);
       this.record = saved;
+      this.recordRefreshVersion++;
       ToastUtil.show(`已保存：${savedPath}`);
     } catch (err) {
       ToastUtil.show((err as Error).message || '保存失败');
@@ -63,13 +90,9 @@ export struct ResultPage {
     }
   }
 
-  private continueConvert(): void {
-    ConvertSessionService.clearImages();
-    this.pathStack.popToIndex(0);
-  }
-
   private backHome(): void {
-    this.pathStack.popToIndex(0);
+    this.recordRefreshVersion++;
+    this.pathStack.clear();
   }
 
   @Builder
@@ -115,7 +138,7 @@ export struct ResultPage {
           Column({ space: 16 }) {
             AppHeader({
               title: '生成结果',
-              subtitle: 'PDF 已生成，可预览、分享或继续转换',
+              subtitle: 'PDF 已生成，可预览、分享或保存',
               showBack: true,
               backAction: (): void => {
                 this.pathStack.pop();
@@ -151,7 +174,6 @@ export struct ResultPage {
             Column({ space: 12 }) {
               this.infoRow('文件名', this.record.fileName)
               this.infoRow('文件大小', SizeUtil.formatFileSize(this.record.fileSize))
-              this.infoRow('保存路径', this.record.filePath)
               this.infoRow('页数', `${this.record.pageCount} 页`)
               this.infoRow('生成时间', DateUtil.formatDateTime(this.record.createTime))
             }
@@ -164,6 +186,7 @@ export struct ResultPage {
             Column({ space: 12 }) {
               PrimaryButton({
                 text: '预览 PDF',
+                loading: this.previewing,
                 btnBackgroundColor: '#2F80ED',
                 action: (): void => {
                   this.previewPdf();
@@ -171,6 +194,7 @@ export struct ResultPage {
               })
               PrimaryButton({
                 text: '分享 PDF',
+                loading: this.sharing,
                 btnBackgroundColor: '#00B894',
                 action: (): void => {
                   this.sharePdf();
@@ -184,16 +208,6 @@ export struct ResultPage {
                   this.saveToLocal();
                 }
               })
-              Button('继续转换')
-                .height(48)
-                .width('100%')
-                .fontSize(16)
-                .fontColor('#2F80ED')
-                .backgroundColor('#EAF4FF')
-                .borderRadius(24)
-                .onClick((): void => {
-                  this.continueConvert();
-                })
               Button('返回首页')
                 .height(48)
                 .width('100%')

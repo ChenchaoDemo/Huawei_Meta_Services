@@ -10,13 +10,14 @@ export class FileSaveService {
   }
 
   static async saveCopyToSandbox(record: PdfRecordModel, context: common.UIAbilityContext): Promise<PdfRecordModel> {
-    const destPath = FileUtil.joinPath(context.filesDir, record.fileName);
+    const fileName = FileUtil.sanitizeFileName(FileUtil.ensurePdfSuffix(record.fileName));
+    const destPath = FileUtil.joinPath(context.filesDir, fileName);
     if (destPath !== record.filePath) {
       FileUtil.copyFile(record.filePath, destPath);
     }
     return {
       id: `${Date.now()}`,
-      fileName: record.fileName,
+      fileName: fileName,
       filePath: destPath,
       fileSize: FileUtil.getFileSize(destPath),
       pageCount: record.pageCount,
@@ -25,9 +26,10 @@ export class FileSaveService {
   }
 
   static async saveToUserSelectedPath(record: PdfRecordModel): Promise<string> {
+    const fileName = FileUtil.sanitizeFileName(FileUtil.ensurePdfSuffix(record.fileName));
     const saveOptions = new picker.DocumentSaveOptions();
-    saveOptions.newFileNames = [record.fileName];
-    saveOptions.fileSuffixChoices = ['pdf'];
+    saveOptions.newFileNames = [fileName];
+    saveOptions.fileSuffixChoices = ['.pdf'];
     const documentPicker = new picker.DocumentViewPicker();
     const uris = await documentPicker.save(saveOptions);
     if (!uris || uris.length === 0) {

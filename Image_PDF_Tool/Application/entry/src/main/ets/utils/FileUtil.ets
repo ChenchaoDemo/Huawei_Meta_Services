@@ -77,4 +77,14 @@ export class FileUtil {
       fileIo.closeSync(dstFile);
     }
   }
+
+  static deleteFileIfExists(path: string): void {
+    if (path.length === 0 || FileUtil.getFileSize(path) <= 0) {
+      return;
+    }
+    try {
+      fileIo.unlinkSync(path);
+    } catch (_) {
+    }
+  }
 }

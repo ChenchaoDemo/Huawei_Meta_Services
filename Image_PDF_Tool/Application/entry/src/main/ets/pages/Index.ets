@@ -1,4 +1,5 @@
 import { common } from '@kit.AbilityKit';
+import { promptAction } from '@kit.ArkUI';
 import { AppHeader } from '../components/AppHeader';
 import { FeatureCard } from '../components/FeatureCard';
 import { PrimaryButton } from '../components/PrimaryButton';
@@ -8,6 +9,7 @@ import { PdfRecordModel } from '../model/PdfRecordModel';
 import { ImagePickerService } from '../service/ImagePickerService';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { RecordStorageService } from '../service/RecordStorageService';
+import { FileUtil } from '../utils/FileUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 import { ImageManagerPage } from './ImageManagerPage';
 import { PdfSettingPage } from './PdfSettingPage';
@@ -18,6 +20,7 @@ import { ResultPage } from './ResultPage';
 @Component
 struct Index {
   @Provide('pathStack') pathStack: NavPathStack = new NavPathStack();
+  @Provide('recordRefreshVersion') @Watch('handleRecordRefresh') recordRefreshVersion: number = 0;
   @State records: PdfRecordModel[] = [];
   @State selecting: boolean = false;
 
@@ -41,6 +44,10 @@ struct Index {
   private async loadRecords(): Promise<void> {
     const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
     this.records = await RecordStorageService.getRecords(context);
+  }
+
+  private handleRecordRefresh(): void {
+    this.loadRecords();
   }
 
   private async pickImages(): Promise<void> {
@@ -84,9 +91,79 @@ struct Index {
     }
   }
 
-  private openRecord(record: PdfRecordModel): void {
-    ConvertSessionService.setRecord(record);
-    this.pathStack.pushPathByName('ResultPage', null);
+  private async openRecord(record: PdfRecordModel): Promise<void> {
+    try {
+      if (FileUtil.getFileSize(record.filePath) <= 0) {
+        const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+        await RecordStorageService.deleteRecord(context, record.id);
+        this.records = await RecordStorageService.getRecords(context);
+        ToastUtil.show('PDF 文件不存在，已移除该记录');
+        return;
+      }
+      ConvertSessionService.setRecord(record);
+      this.pathStack.pushPathByName('ResultPage', null);
+    } catch (err) {
+      ToastUtil.show((err as Error).message || '打开记录失败');
+    }
+  }
+
+  private confirmDeleteRecord(record: PdfRecordModel): void {
+    promptAction.showDialog({
+      title: '删除记录',
+      message: `确定删除“${record.fileName}”吗？对应的沙箱 PDF 文件也会一起删除。`,
+      buttons: [
+        { text: '取消', color: '#6B7280' },
+        { text: '删除', color: '#EF4444' }
+      ]
+    }).then((result): void => {
+      if (result.index === 1) {
+        this.deleteRecord(record);
+      }
+    });
+  }
+
+  private async deleteRecord(record: PdfRecordModel): Promise<void> {
+    try {
+      const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      FileUtil.deleteFileIfExists(record.filePath);
+      await RecordStorageService.deleteRecord(context, record.id);
+      this.records = await RecordStorageService.getRecords(context);
+      ToastUtil.show('已删除');
+    } catch (err) {
+      ToastUtil.show((err as Error).message || '删除失败');
+    }
+  }
+
+  private confirmClearRecords(): void {
+    if (this.records.length === 0) {
+      return;
+    }
+    promptAction.showDialog({
+      title: '清空最近生成',
+      message: '确定清空所有最近生成记录吗？对应的沙箱 PDF 文件也会一起删除。',
+      buttons: [
+        { text: '取消', color: '#6B7280' },
+        { text: '清空', color: '#EF4444' }
+      ]
+    }).then((result): void => {
+      if (result.index === 1) {
+        this.clearRecords();
+      }
+    });
+  }
+
+  private async clearRecords(): Promise<void> {
+    try {
+      const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      this.records.forEach((record: PdfRecordModel): void => {
+        FileUtil.deleteFileIfExists(record.filePath);
+      });
+      await RecordStorageService.clearRecords(context);
+      this.records = [];
+      ToastUtil.show('已清空最近生成');
+    } catch (err) {
+      ToastUtil.show((err as Error).message || '清空失败');
+    }
   }
 
   build() {
@@ -153,6 +230,7 @@ struct Index {
               .borderRadius(24)
               .backgroundColor('#FFFFFF')
               .border({ width: 1, color: '#BFDBFE' })
+              .enabled(!this.selecting)
               .onClick((): void => {
                 this.takePhoto();
               })
@@ -169,9 +247,15 @@ struct Index {
                 .fontColor('#1F2937')
               Blank()
               if (this.records.length > 0) {
-                Text('最多保留 10 条')
-                  .fontSize(12)
-                  .fontColor('#9CA3AF')
+                Button('清空')
+                  .height(32)
+                  .fontSize(13)
+                  .fontColor('#EF4444')
+                  .backgroundColor('#FFF1F2')
+                  .borderRadius(16)
+                  .onClick((): void => {
+                    this.confirmClearRecords();
+                  })
               }
             }
             .width('100%')
@@ -190,6 +274,9 @@ struct Index {
                     record: record,
                     openAction: (): void => {
                       this.openRecord(record);
+                    },
+                    deleteAction: (): void => {
+                      this.confirmDeleteRecord(record);
                     }
                   })
                 }, (record: PdfRecordModel): string => record.id)

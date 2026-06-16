@@ -13,6 +13,7 @@ export struct RecentPdfCard {
     createTime: 0
   };
   openAction: () => void = (): void => {};
+  deleteAction: () => void = (): void => {};
 
   build() {
     Row({ space: 12 }) {
@@ -42,18 +43,34 @@ export struct RecentPdfCard {
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
+      .onClick((): void => {
+        this.openAction();
+      })
 
-      Text('›')
-        .fontSize(24)
-        .fontColor('#9CA3AF')
+      Button('打开')
+        .height(34)
+        .fontSize(13)
+        .fontColor('#2F80ED')
+        .backgroundColor('#EAF4FF')
+        .borderRadius(17)
+        .onClick((): void => {
+          this.openAction();
+        })
+
+      Button('删除')
+        .height(34)
+        .fontSize(13)
+        .fontColor('#EF4444')
+        .backgroundColor('#FFF1F2')
+        .borderRadius(17)
+        .onClick((): void => {
+          this.deleteAction();
+        })
     }
     .width('100%')
     .padding(14)
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .shadow({ radius: 12, color: '#0D000000', offsetX: 0, offsetY: 4 })
-    .onClick((): void => {
-      this.openAction();
-    })
   }
 }

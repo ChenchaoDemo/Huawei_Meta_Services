@@ -5,6 +5,7 @@ import { ImageItemCard } from '../components/ImageItemCard';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { EmptyView } from '../components/EmptyView';
 import { ImageFileModel, refreshImageOrder, cloneImageFile } from '../model/ImageFileModel';
+import { MAX_IMAGE_COUNT } from '../model/BusinessConstants';
 import { ImagePickerService } from '../service/ImagePickerService';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { ToastUtil } from '../utils/ToastUtil';
@@ -26,8 +27,11 @@ export struct ImageManagerPage {
   }
 
   private async addImages(): Promise<void> {
-    if (this.images.length >= 30) {
-      ToastUtil.show('最多只能选择 30 张图片');
+    if (this.adding) {
+      return;
+    }
+    if (this.images.length >= MAX_IMAGE_COUNT) {
+      ToastUtil.show(`最多只能选择 ${MAX_IMAGE_COUNT} 张图片`);
       return;
     }
     this.adding = true;
@@ -46,8 +50,11 @@ export struct ImageManagerPage {
   }
 
   private async takePhoto(): Promise<void> {
-    if (this.images.length >= 30) {
-      ToastUtil.show('最多只能选择 30 张图片');
+    if (this.adding) {
+      return;
+    }
+    if (this.images.length >= MAX_IMAGE_COUNT) {
+      ToastUtil.show(`最多只能选择 ${MAX_IMAGE_COUNT} 张图片`);
       return;
     }
     this.adding = true;
@@ -183,7 +190,7 @@ export struct ImageManagerPage {
         Column() {
           AppHeader({
             title: '管理图片',
-            subtitle: `${this.images.length} / 30 张，可调整 PDF 页序`,
+            subtitle: `${this.images.length} / ${MAX_IMAGE_COUNT} 张，可调整 PDF 页序`,
             showBack: true,
             backAction: (): void => {
               this.pathStack.pop();
@@ -196,7 +203,7 @@ export struct ImageManagerPage {
               .fontSize(14)
               .fontColor('#2F80ED')
               .backgroundColor('#EAF4FF')
-              .enabled(!this.adding && this.images.length < 30)
+              .enabled(!this.adding && this.images.length < MAX_IMAGE_COUNT)
               .onClick((): void => {
                 this.addImages();
               })
@@ -205,7 +212,7 @@ export struct ImageManagerPage {
               .fontSize(14)
               .fontColor('#00B894')
               .backgroundColor('#ECFDF5')
-              .enabled(!this.adding && this.images.length < 30)
+              .enabled(!this.adding && this.images.length < MAX_IMAGE_COUNT)
               .margin({ left: 8 })
               .onClick((): void => {
                 this.takePhoto();

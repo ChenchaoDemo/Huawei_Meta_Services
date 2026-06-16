@@ -13,6 +13,7 @@ import { ToastUtil } from '../utils/ToastUtil';
 @Component
 export struct GeneratePage {
   @Consume('pathStack') pathStack: NavPathStack;
+  @Consume('recordRefreshVersion') recordRefreshVersion: number;
   @State current: number = 0;
   @State total: number = 0;
   @State generating: boolean = false;
@@ -49,6 +50,8 @@ export struct GeneratePage {
       });
       ConvertSessionService.setRecord(record);
       await RecordStorageService.addRecord(context, record);
+      this.recordRefreshVersion++;
+      this.pathStack.clear();
       this.pathStack.pushPathByName('ResultPage', null);
     } catch (err) {
       this.errorMessage = (err as Error).message || '生成 PDF 失败';

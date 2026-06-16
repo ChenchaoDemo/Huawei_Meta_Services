@@ -4,9 +4,8 @@ import { image } from '@kit.ImageKit';
 import { common } from '@kit.AbilityKit';
 import { camera, cameraPicker } from '@kit.CameraKit';
 import { ImageFileModel } from '../model/ImageFileModel';
+import { MAX_IMAGE_COUNT } from '../model/BusinessConstants';
 import { FileUtil } from '../utils/FileUtil';
-
-const MAX_IMAGE_COUNT = 30;
 
 interface ImageSizeInfo {
   width: number;
@@ -17,7 +16,7 @@ export class ImagePickerService {
   static async selectImages(currentCount: number = 0): Promise<ImageFileModel[]> {
     const remainCount = MAX_IMAGE_COUNT - currentCount;
     if (remainCount <= 0) {
-      throw new Error('最多只能选择 30 张图片');
+      throw new Error(`最多只能选择 ${MAX_IMAGE_COUNT} 张图片`);
     }
 
     const photoSelectOptions = new photoAccessHelper.PhotoSelectOptions();
@@ -53,7 +52,7 @@ export class ImagePickerService {
 
   static async takePhoto(context: common.UIAbilityContext, currentCount: number = 0): Promise<ImageFileModel[]> {
     if (currentCount >= MAX_IMAGE_COUNT) {
-      throw new Error('最多只能选择 30 张图片');
+      throw new Error(`最多只能选择 ${MAX_IMAGE_COUNT} 张图片`);
     }
     const profile: cameraPicker.PickerProfile = {
       cameraPosition: camera.CameraPosition.CAMERA_POSITION_BACK
@@ -96,12 +95,17 @@ export class ImagePickerService {
 
   private static async safeGetImageSize(uri: string): Promise<ImageSizeInfo> {
     try {
-      const source = image.createImageSource(uri);
-      const info = await source.getImageInfo();
-      return {
-        width: info.size.width,
-        height: info.size.height
-      };
+      const imageFile = fileIo.openSync(uri, fileIo.OpenMode.READ_ONLY);
+      try {
+        const source = image.createImageSource(imageFile.fd);
+        const info = await source.getImageInfo();
+        return {
+          width: info.size.width,
+          height: info.size.height
+        };
+      } finally {
+        fileIo.closeSync(imageFile);
+      }
     } catch (_) {
       return {
         width: 0,

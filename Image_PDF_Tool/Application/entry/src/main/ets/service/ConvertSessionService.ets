@@ -1,6 +1,7 @@
 import { ImageFileModel, cloneImageFile, refreshImageOrder } from '../model/ImageFileModel';
 import { PdfSettingModel, clonePdfSetting } from '../model/PdfSettingModel';
 import { PdfRecordModel, clonePdfRecord } from '../model/PdfRecordModel';
+import { MAX_IMAGE_COUNT } from '../model/BusinessConstants';
 
 export class ConvertSessionService {
   private static images: ImageFileModel[] = [];
@@ -8,7 +9,7 @@ export class ConvertSessionService {
   private static record: PdfRecordModel | null = null;
 
   static setImages(images: ImageFileModel[]): void {
-    ConvertSessionService.images = refreshImageOrder(images);
+    ConvertSessionService.images = refreshImageOrder(images.slice(0, MAX_IMAGE_COUNT));
   }
 
   static getImages(): ImageFileModel[] {
@@ -17,7 +18,7 @@ export class ConvertSessionService {
 
   static appendImages(images: ImageFileModel[]): ImageFileModel[] {
     const merged = ConvertSessionService.images.concat(images);
-    ConvertSessionService.images = refreshImageOrder(merged);
+    ConvertSessionService.images = refreshImageOrder(merged.slice(0, MAX_IMAGE_COUNT));
     return ConvertSessionService.getImages();
   }
 
