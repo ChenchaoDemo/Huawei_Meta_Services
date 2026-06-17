@@ -8,12 +8,12 @@ import { ImageFileModel, refreshImageOrder, cloneImageFile } from '../model/Imag
 import { MAX_IMAGE_COUNT } from '../model/BusinessConstants';
 import { ImagePickerService } from '../service/ImagePickerService';
 import { ConvertSessionService } from '../service/ConvertSessionService';
+import { NavPathStackUtil } from '../utils/NavPathStackUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 
-@Entry
 @Component
 export struct ImageManagerPage {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @State images: ImageFileModel[] = [];
   @State adding: boolean = false;
 
@@ -176,7 +176,7 @@ export struct ImageManagerPage {
       return;
     }
     ConvertSessionService.setImages(this.images);
-    this.pathStack.pushPathByName('PdfSettingPage', null);
+    NavPathStackUtil.pushPathByName(this.pathStack, 'PdfSettingPage', null);
   }
 
   build() {
@@ -193,7 +193,7 @@ export struct ImageManagerPage {
             subtitle: `${this.images.length} / ${MAX_IMAGE_COUNT} 张，可调整 PDF 页序`,
             showBack: true,
             backAction: (): void => {
-              this.pathStack.pop();
+              NavPathStackUtil.pop(this.pathStack);
             }
           })
 

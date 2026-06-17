@@ -3,6 +3,7 @@ import { Post } from './Post';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { RouterParamsType } from './CloudDb';
+import { NavPathStackUtil } from '../../utils/NavPathStackUtil';
 
 const MAX_ID = 100;
 const HILOG_DOMAIN = 0x0000;
@@ -14,7 +15,7 @@ const agcDataBase: cloudDatabase.DatabaseZone = cloudDatabase.zone('Demo');
 
 @Component
 export struct DbInsert {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @State content: string = '';
   private isEditing: boolean = false;
   private recordId: string | undefined = undefined;
@@ -52,7 +53,7 @@ export struct DbInsert {
           title: $r('app.string.dialog_success_title'),
           message: $r('app.string.dialog_success_message'),
           cancel: () => {
-            this.pathStack.pop();
+            NavPathStackUtil.pop(this.pathStack);
           }
         });
       }).catch((err: BusinessError) => {

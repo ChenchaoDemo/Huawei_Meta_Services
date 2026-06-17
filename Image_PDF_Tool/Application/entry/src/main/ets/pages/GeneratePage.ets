@@ -7,12 +7,12 @@ import { PdfSettingModel } from '../model/PdfSettingModel';
 import { PdfGenerateService } from '../service/PdfGenerateService';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { RecordStorageService } from '../service/RecordStorageService';
+import { NavPathStackUtil } from '../utils/NavPathStackUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 
-@Entry
 @Component
 export struct GeneratePage {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @Consume('recordRefreshVersion') recordRefreshVersion: number;
   @State current: number = 0;
   @State total: number = 0;
@@ -22,7 +22,9 @@ export struct GeneratePage {
 
   aboutToAppear(): void {
     if (!this.hasStarted) {
-      this.startGenerate();
+      setTimeout((): void => {
+        this.startGenerate();
+      }, 0);
     }
   }
 
@@ -35,7 +37,7 @@ export struct GeneratePage {
     const setting: PdfSettingModel | null = ConvertSessionService.getSetting();
     if (setting === null) {
       ToastUtil.show('请先完成 PDF 参数设置');
-      this.pathStack.pop();
+      NavPathStackUtil.pop(this.pathStack);
       return;
     }
     this.total = images.length;
@@ -51,8 +53,7 @@ export struct GeneratePage {
       ConvertSessionService.setRecord(record);
       await RecordStorageService.addRecord(context, record);
       this.recordRefreshVersion++;
-      this.pathStack.clear();
-      this.pathStack.pushPathByName('ResultPage', null);
+      NavPathStackUtil.clearAndPushPathByName(this.pathStack, 'ResultPage', null);
     } catch (err) {
       this.errorMessage = (err as Error).message || '生成 PDF 失败';
       this.showErrorDialog();
@@ -74,7 +75,7 @@ export struct GeneratePage {
         this.hasStarted = false;
         this.startGenerate();
       } else {
-        this.pathStack.pop();
+        NavPathStackUtil.pop(this.pathStack);
       }
     });
   }
@@ -90,7 +91,7 @@ export struct GeneratePage {
             if (this.generating) {
               ToastUtil.show('PDF 正在生成，请稍候');
             } else {
-              this.pathStack.pop();
+              NavPathStackUtil.pop(this.pathStack);
             }
           }
         })

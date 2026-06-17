@@ -1,9 +1,5 @@
 {
   "src": [
-    "pages/Index",
-    "pages/ImageManagerPage",
-    "pages/PdfSettingPage",
-    "pages/GeneratePage",
-    "pages/ResultPage"
+    "pages/Index"
   ]
 }

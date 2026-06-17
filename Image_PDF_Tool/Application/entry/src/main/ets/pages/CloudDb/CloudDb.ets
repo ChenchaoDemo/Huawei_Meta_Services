@@ -1,5 +1,6 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { cloudDatabase } from '@kit.CloudFoundationKit';
+import { NavPathStackUtil } from '../../utils/NavPathStackUtil';
 import { Post } from './Post';
 
 const HILOG_DOMAIN = 0x0000;
@@ -19,7 +20,7 @@ export interface RouterParamsType {
 
 @Component
 export struct CloudDb {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @State isSelected: boolean = false;
   @State allRecords: Post[] = [];
 
@@ -181,7 +182,7 @@ export struct CloudDb {
             .height($r('app.float.number_25'))
             .borderRadius($r('app.float.number_5'))
             .onClick(() => {
-              this.pathStack.pushPathByName('DbInsert', {
+              NavPathStackUtil.pushPathByName(this.pathStack, 'DbInsert', {
                 isEditing: false,
                 checkBoxStatus: this.isSelected,
                 content: ''
@@ -241,7 +242,7 @@ export struct CloudDb {
                           .width($r('app.float.number_20'))
                           .height($r('app.float.number_20'))
                           .onClick(() => {
-                            this.pathStack.pushPathByName('DbInsert', {
+                            NavPathStackUtil.pushPathByName(this.pathStack, 'DbInsert', {
                               isEditing: true,
                               recordId: item.id.toString(),
                               content: item.content,

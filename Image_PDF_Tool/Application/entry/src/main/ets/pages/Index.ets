@@ -10,6 +10,7 @@ import { ImagePickerService } from '../service/ImagePickerService';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { RecordStorageService } from '../service/RecordStorageService';
 import { FileUtil } from '../utils/FileUtil';
+import { NavPathStackUtil } from '../utils/NavPathStackUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 import { ImageManagerPage } from './ImageManagerPage';
 import { PdfSettingPage } from './PdfSettingPage';
@@ -19,7 +20,7 @@ import { ResultPage } from './ResultPage';
 @Entry
 @Component
 struct Index {
-  @Provide('pathStack') pathStack: NavPathStack = new NavPathStack();
+  private pathStack: NavPathStack = new NavPathStack();
   @Provide('recordRefreshVersion') @Watch('handleRecordRefresh') recordRefreshVersion: number = 0;
   @State records: PdfRecordModel[] = [];
   @State selecting: boolean = false;
@@ -31,13 +32,13 @@ struct Index {
   @Builder
   pathMap(routeName: string) {
     if (routeName === 'ImageManagerPage') {
-      ImageManagerPage();
+      ImageManagerPage({ pathStack: this.pathStack });
     } else if (routeName === 'PdfSettingPage') {
-      PdfSettingPage();
+      PdfSettingPage({ pathStack: this.pathStack });
     } else if (routeName === 'GeneratePage') {
-      GeneratePage();
+      GeneratePage({ pathStack: this.pathStack });
     } else if (routeName === 'ResultPage') {
-      ResultPage();
+      ResultPage({ pathStack: this.pathStack });
     }
   }
 
@@ -62,7 +63,7 @@ struct Index {
         return;
       }
       ConvertSessionService.setImages(images);
-      this.pathStack.pushPathByName('ImageManagerPage', null);
+      NavPathStackUtil.pushPathByName(this.pathStack, 'ImageManagerPage', null);
     } catch (err) {
       ToastUtil.show((err as Error).message || '选择图片失败');
     } finally {
@@ -83,7 +84,7 @@ struct Index {
         return;
       }
       ConvertSessionService.setImages(images);
-      this.pathStack.pushPathByName('ImageManagerPage', null);
+      NavPathStackUtil.pushPathByName(this.pathStack, 'ImageManagerPage', null);
     } catch (err) {
       ToastUtil.show((err as Error).message || '拍照失败');
     } finally {
@@ -101,7 +102,7 @@ struct Index {
         return;
       }
       ConvertSessionService.setRecord(record);
-      this.pathStack.pushPathByName('ResultPage', null);
+      NavPathStackUtil.pushPathByName(this.pathStack, 'ResultPage', null);
     } catch (err) {
       ToastUtil.show((err as Error).message || '打开记录失败');
     }

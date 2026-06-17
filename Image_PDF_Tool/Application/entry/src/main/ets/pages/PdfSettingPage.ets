@@ -6,6 +6,7 @@ import { ImageFileModel } from '../model/ImageFileModel';
 import { PdfSettingModel, PdfFitMode, PdfMargin, PdfOrientation, PdfPageSize, PdfQuality } from '../model/PdfSettingModel';
 import { ConvertSessionService } from '../service/ConvertSessionService';
 import { DateUtil } from '../utils/DateUtil';
+import { NavPathStackUtil } from '../utils/NavPathStackUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 
 interface PreviewBoxSize {
@@ -47,10 +48,9 @@ struct PdfOptionGroup {
   }
 }
 
-@Entry
 @Component
 export struct PdfSettingPage {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @State fileName: string = DateUtil.defaultPdfFileName();
   @State pageSizeIndex: number = 0;
   @State fitModeIndex: number = 0;
@@ -356,7 +356,7 @@ export struct PdfSettingPage {
     this.previewImages = ConvertSessionService.getImages();
     if (this.previewImages.length === 0) {
       ToastUtil.show('请先选择需要转换的图片');
-      this.pathStack.pop();
+      NavPathStackUtil.pop(this.pathStack);
       return;
     }
     if (this.fileName.trim().length === 0) {
@@ -369,7 +369,7 @@ export struct PdfSettingPage {
       return;
     }
     ConvertSessionService.setSetting(this.buildSetting());
-    this.pathStack.pushPathByName('GeneratePage', null);
+    NavPathStackUtil.pushPathByName(this.pathStack, 'GeneratePage', null);
   }
 
   build() {
@@ -387,7 +387,7 @@ export struct PdfSettingPage {
               subtitle: '设置页面尺寸、边距与图片质量',
               showBack: true,
               backAction: (): void => {
-                this.pathStack.pop();
+                NavPathStackUtil.pop(this.pathStack);
               }
             })
 

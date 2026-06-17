@@ -7,14 +7,14 @@ import { ConvertSessionService } from '../service/ConvertSessionService';
 import { FileSaveService } from '../service/FileSaveService';
 import { PdfResultActionService } from '../service/PdfResultActionService';
 import { RecordStorageService } from '../service/RecordStorageService';
+import { NavPathStackUtil } from '../utils/NavPathStackUtil';
 import { SizeUtil } from '../utils/SizeUtil';
 import { DateUtil } from '../utils/DateUtil';
 import { ToastUtil } from '../utils/ToastUtil';
 
-@Entry
 @Component
 export struct ResultPage {
-  @Consume('pathStack') pathStack: NavPathStack;
+  pathStack: NavPathStack = new NavPathStack();
   @Consume('recordRefreshVersion') recordRefreshVersion: number;
   @State hasRecord: boolean = false;
   @State record: PdfRecordModel = {
@@ -92,7 +92,7 @@ export struct ResultPage {
 
   private backHome(): void {
     this.recordRefreshVersion++;
-    this.pathStack.clear();
+    NavPathStackUtil.clear(this.pathStack);
   }
 
   @Builder
@@ -120,7 +120,7 @@ export struct ResultPage {
             title: '生成结果',
             showBack: true,
             backAction: (): void => {
-              this.pathStack.pop();
+              NavPathStackUtil.pop(this.pathStack);
             }
           })
           EmptyView({
@@ -141,7 +141,7 @@ export struct ResultPage {
               subtitle: 'PDF 已生成，可预览、分享或保存',
               showBack: true,
               backAction: (): void => {
-                this.pathStack.pop();
+                NavPathStackUtil.pop(this.pathStack);
               }
             })
 
