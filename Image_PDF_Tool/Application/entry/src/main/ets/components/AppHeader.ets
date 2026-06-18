@@ -23,26 +23,18 @@ export struct AppHeader {
         })
       }
 
-      Column({ space: 4 }) {
-        Text(this.title)
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#1F2937')
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-        if (this.subtitle.length > 0) {
-          Text(this.subtitle)
-            .fontSize(14)
-            .fontColor('#4B5563')
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-      .margin({ left: this.showBack ? 12 : 0 })
+      Text(this.title)
+        .fontSize(this.showBack ? 20 : 22)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#1F2937')
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .margin({ left: this.showBack ? 12 : 0 })
     }
     .width('100%')
-    .padding({ top: 16, bottom: 12 })
+    .height(64)
+    .padding({ right: 112 })
+    .alignItems(VerticalAlign.Center)
   }
 }

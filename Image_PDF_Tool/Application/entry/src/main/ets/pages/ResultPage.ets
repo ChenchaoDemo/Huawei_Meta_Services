@@ -131,7 +131,7 @@ export struct ResultPage {
         }
         .width('100%')
         .height('100%')
-        .padding({ left: 16, right: 16 })
+        .padding({ left: 16, right: 16, bottom: 40 })
         .backgroundColor('#F5F7FA')
       } else {
         Scroll() {
@@ -220,7 +220,7 @@ export struct ResultPage {
                 })
             }
             .width('100%')
-            .padding({ bottom: 24 })
+            .padding({ bottom: 40 })
           }
           .width('100%')
           .padding({ left: 16, right: 16 })

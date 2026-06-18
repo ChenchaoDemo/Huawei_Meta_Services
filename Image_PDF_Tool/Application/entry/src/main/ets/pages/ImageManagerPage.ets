@@ -199,7 +199,7 @@ export struct ImageManagerPage {
 
           Row() {
             Button('继续添加')
-              .height(36)
+              .height(40)
               .fontSize(14)
               .fontColor('#2F80ED')
               .backgroundColor('#EAF4FF')
@@ -208,7 +208,7 @@ export struct ImageManagerPage {
                 this.addImages();
               })
             Button('拍照')
-              .height(36)
+              .height(40)
               .fontSize(14)
               .fontColor('#00B894')
               .backgroundColor('#ECFDF5')
@@ -219,7 +219,7 @@ export struct ImageManagerPage {
               })
             Blank()
             Button('清空全部')
-              .height(36)
+              .height(40)
               .fontSize(14)
               .fontColor('#EF4444')
               .backgroundColor('#FFF1F2')
@@ -257,7 +257,7 @@ export struct ImageManagerPage {
                   })
                 }, (image: ImageFileModel): string => image.id)
                 Column()
-                  .height(84)
+                  .height(112)
               }
               .width('100%')
             }
@@ -279,7 +279,7 @@ export struct ImageManagerPage {
           })
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 12, bottom: 16 })
+        .padding({ left: 16, right: 16, top: 12, bottom: 32 })
         .backgroundColor('#F5F7FA')
       }
     }

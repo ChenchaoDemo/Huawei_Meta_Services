@@ -29,7 +29,7 @@ export struct ImageItemCard {
           .objectFit(ImageFit.Cover)
           .backgroundColor('#E5E7EB')
         Text(`${this.image.order}`)
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#FFFFFF')
           .fontWeight(FontWeight.Bold)
           .height(22)
@@ -48,12 +48,12 @@ export struct ImageItemCard {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(`${SizeUtil.formatImageSize(this.image.width, this.image.height)} · ${SizeUtil.formatFileSize(this.image.size)}`)
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#6B7280')
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(this.image.mimeType)
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#9CA3AF')
           .maxLines(1)
       }
@@ -62,8 +62,8 @@ export struct ImageItemCard {
 
       Column({ space: 8 }) {
         Button('上移')
-          .height(28)
-          .fontSize(12)
+          .height(40)
+          .fontSize(13)
           .fontColor(this.isFirst ? '#9CA3AF' : '#2F80ED')
           .backgroundColor('#F3F7FF')
           .enabled(!this.isFirst)
@@ -71,8 +71,8 @@ export struct ImageItemCard {
             this.upAction();
           })
         Button('下移')
-          .height(28)
-          .fontSize(12)
+          .height(40)
+          .fontSize(13)
           .fontColor(this.isLast ? '#9CA3AF' : '#2F80ED')
           .backgroundColor('#F3F7FF')
           .enabled(!this.isLast)
@@ -80,15 +80,15 @@ export struct ImageItemCard {
             this.downAction();
           })
         Button('删除')
-          .height(28)
-          .fontSize(12)
+          .height(40)
+          .fontSize(13)
           .fontColor('#EF4444')
           .backgroundColor('#FFF1F2')
           .onClick((): void => {
             this.deleteAction();
           })
       }
-      .width(58)
+      .width(64)
     }
     .width('100%')
     .padding(12)

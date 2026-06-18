@@ -27,7 +27,7 @@ struct PdfOptionGroup {
       Row({ space: 8 }) {
         ForEach(this.labels, (label: string, index: number) => {
           Button(label)
-            .height(36)
+            .height(40)
             .layoutWeight(1)
             .fontSize(13)
             .fontColor(index === this.selectedIndex ? '#FFFFFF' : '#4B5563')
@@ -264,7 +264,7 @@ export struct PdfSettingPage {
             .fontSize(14)
             .fontColor('#9CA3AF')
           Text('返回上一步添加后可预览')
-            .fontSize(11)
+            .fontSize(13)
             .fontColor('#CBD5E1')
         }
         .justifyContent(FlexAlign.Center)
@@ -293,10 +293,10 @@ export struct PdfSettingPage {
   previewMeta(label: string, value: string) {
     Row() {
       Text(label)
-        .fontSize(12)
+        .fontSize(13)
         .fontColor('#9CA3AF')
       Text(value)
-        .fontSize(12)
+        .fontSize(13)
         .fontColor('#1F2937')
         .fontWeight(FontWeight.Medium)
     }
@@ -314,13 +314,13 @@ export struct PdfSettingPage {
             .fontWeight(FontWeight.Bold)
             .fontColor('#1F2937')
           Text('根据当前参数模拟生成后的页面版式')
-            .fontSize(12)
+            .fontSize(13)
             .fontColor('#9CA3AF')
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
         Text(this.getPreviewPageLabel())
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#2F80ED')
           .padding({ left: 10, right: 10, top: 5, bottom: 5 })
           .backgroundColor('#EAF3FF')
@@ -453,7 +453,7 @@ export struct PdfSettingPage {
                   .fontWeight(FontWeight.Medium)
                   .fontColor('#1F2937')
                 Text(this.canMergeToOnePage() ? '默认开启，适合扫描件、作业、票据整理' : `超过 ${MAX_MERGED_PAGE_IMAGE_COUNT} 张图片时固定为每张独立一页`)
-                  .fontSize(12)
+                  .fontSize(13)
                   .fontColor('#9CA3AF')
               }
               .alignItems(HorizontalAlign.Start)
@@ -472,7 +472,7 @@ export struct PdfSettingPage {
             .shadow({ radius: 12, color: '#0D000000', offsetX: 0, offsetY: 4 })
 
             Column()
-              .height(84)
+              .height(112)
           }
           .width('100%')
           .padding({ left: 16, right: 16 })
@@ -490,7 +490,7 @@ export struct PdfSettingPage {
           })
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 12, bottom: 16 })
+        .padding({ left: 16, right: 16, top: 12, bottom: 32 })
         .backgroundColor('#F5F7FA')
       }
     }

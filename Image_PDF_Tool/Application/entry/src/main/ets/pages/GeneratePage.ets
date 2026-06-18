@@ -19,13 +19,19 @@ export struct GeneratePage {
   @State generating: boolean = false;
   @State hasStarted: boolean = false;
   @State errorMessage: string = '';
+  private isLeaving: boolean = false;
 
   aboutToAppear(): void {
+    this.isLeaving = false;
     if (!this.hasStarted) {
       setTimeout((): void => {
         this.startGenerate();
       }, 0);
     }
+  }
+
+  aboutToDisappear(): void {
+    this.isLeaving = true;
   }
 
   private async startGenerate(): Promise<void> {
@@ -47,14 +53,22 @@ export struct GeneratePage {
     try {
       const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
       const record = await PdfGenerateService.generatePdf(context, images, setting, (current: number, total: number): void => {
-        this.current = current;
-        this.total = total;
+        if (!this.isLeaving) {
+          this.current = current;
+          this.total = total;
+        }
       });
+      if (this.isLeaving) {
+        return;
+      }
       ConvertSessionService.setRecord(record);
       await RecordStorageService.addRecord(context, record);
       this.recordRefreshVersion++;
       NavPathStackUtil.clearAndPushPathByName(this.pathStack, 'ResultPage', null);
     } catch (err) {
+      if (this.isLeaving) {
+        return;
+      }
       this.errorMessage = (err as Error).message || '生成 PDF 失败';
       this.showErrorDialog();
     } finally {
@@ -88,11 +102,8 @@ export struct GeneratePage {
           subtitle: '正在处理图片，请勿关闭页面',
           showBack: true,
           backAction: (): void => {
-            if (this.generating) {
-              ToastUtil.show('PDF 正在生成，请稍候');
-            } else {
-              NavPathStackUtil.pop(this.pathStack);
-            }
+            this.isLeaving = true;
+            NavPathStackUtil.pop(this.pathStack);
           }
         })
 
@@ -153,7 +164,7 @@ export struct GeneratePage {
       }
       .width('100%')
       .height('100%')
-      .padding({ left: 16, right: 16 })
+      .padding({ left: 16, right: 16, bottom: 40 })
       .backgroundColor('#F5F7FA')
     }
     .hideTitleBar(true)

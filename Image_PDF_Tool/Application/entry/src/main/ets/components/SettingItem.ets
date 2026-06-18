@@ -12,7 +12,7 @@ export struct SettingItem {
           .fontColor('#1F2937')
         if (this.description.length > 0) {
           Text(this.description)
-            .fontSize(12)
+            .fontSize(13)
             .fontColor('#9CA3AF')
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })

@@ -11,11 +11,11 @@ export struct FeatureCard {
         .fontSize(18)
         .fontColor(this.iconColor)
         .fontWeight(FontWeight.Bold)
-        .width(34)
-        .height(34)
+        .width(40)
+        .height(40)
         .textAlign(TextAlign.Center)
         .backgroundColor('#EEF6FF')
-        .borderRadius(17)
+        .borderRadius(20)
 
       Column({ space: 3 }) {
         Text(this.title)
@@ -25,7 +25,7 @@ export struct FeatureCard {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(this.description)
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#6B7280')
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })

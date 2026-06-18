@@ -22,6 +22,21 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(HILOG_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageCreate');
+    try {
+      const mainWindow = windowStage.getMainWindowSync();
+      mainWindow.setWindowSystemBarProperties({
+        statusBarColor: '#F5F7FA',
+        navigationBarColor: '#F5F7FA',
+        isStatusBarLightIcon: false,
+        isNavigationBarLightIcon: false,
+        statusBarContentColor: '#1F2937',
+        navigationBarContentColor: '#1F2937'
+      }).catch((err: Error): void => {
+        hilog.error(HILOG_DOMAIN, TAG, 'Failed to set system bars. Cause: %{public}s', JSON.stringify(err));
+      });
+    } catch (err) {
+      hilog.error(HILOG_DOMAIN, TAG, 'Failed to set system bars. Cause: %{public}s', JSON.stringify(err));
+    }
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {

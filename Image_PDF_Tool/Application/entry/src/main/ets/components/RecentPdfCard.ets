@@ -18,7 +18,7 @@ export struct RecentPdfCard {
   build() {
     Row({ space: 12 }) {
       Text('PDF')
-        .fontSize(12)
+        .fontSize(13)
         .fontWeight(FontWeight.Bold)
         .fontColor('#2F80ED')
         .width(48)
@@ -35,10 +35,10 @@ export struct RecentPdfCard {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(`${this.record.pageCount} 页 · ${SizeUtil.formatFileSize(this.record.fileSize)}`)
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#6B7280')
         Text(DateUtil.formatDateTime(this.record.createTime))
-          .fontSize(12)
+          .fontSize(13)
           .fontColor('#9CA3AF')
       }
       .alignItems(HorizontalAlign.Start)
@@ -48,21 +48,21 @@ export struct RecentPdfCard {
       })
 
       Button('打开')
-        .height(34)
+        .height(40)
         .fontSize(13)
         .fontColor('#2F80ED')
         .backgroundColor('#EAF4FF')
-        .borderRadius(17)
+        .borderRadius(20)
         .onClick((): void => {
           this.openAction();
         })
 
       Button('删除')
-        .height(34)
+        .height(40)
         .fontSize(13)
         .fontColor('#EF4444')
         .backgroundColor('#FFF1F2')
-        .borderRadius(17)
+        .borderRadius(20)
         .onClick((): void => {
           this.deleteAction();
         })

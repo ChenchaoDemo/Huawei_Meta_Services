@@ -15,10 +15,10 @@
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "$string:entryability_desc",
-        "icon": "$media:layered_image",
+        "icon": "$media:startIcon",
         "label": "$string:entryability_label",
-        "startWindowIcon": "$media:layered_image",
-        "startWindowBackground": "$color:white",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [
           {
