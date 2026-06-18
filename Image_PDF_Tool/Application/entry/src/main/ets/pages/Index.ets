@@ -213,28 +213,28 @@ struct Index {
               Text(`${(this.records ?? []).length}`)
                 .fontSize(20)
                 .fontWeight(FontWeight.Bold)
-                .fontColor('#FFFFFF')
+                .fontColor('#111827')
               Text('最近记录')
                 .fontSize(12)
-                .fontColor('#DCEBFF')
+                .fontColor('#374151')
             }
             .layoutWeight(1)
             .padding({ top: 10, bottom: 10 })
-            .backgroundColor('#24FFFFFF')
+            .backgroundColor('#FFFFFF')
             .borderRadius(14)
 
             Column({ space: 2 }) {
               Text('10')
                 .fontSize(20)
                 .fontWeight(FontWeight.Bold)
-                .fontColor('#FFFFFF')
+                .fontColor('#111827')
               Text('最多保留')
                 .fontSize(12)
-                .fontColor('#DCEBFF')
+                .fontColor('#374151')
             }
             .layoutWeight(1)
             .padding({ top: 10, bottom: 10 })
-            .backgroundColor('#24FFFFFF')
+            .backgroundColor('#FFFFFF')
             .borderRadius(14)
           }
           .width('100%')
@@ -575,12 +575,12 @@ struct Index {
           this.mineTabContent
         ],
         tabBarOptionsArray: [
-          new TabBarOptions($r('app.media.window'), '首页', '#801F2937', '#FF2F80ED'),
-          new TabBarOptions($r('app.media.ic_public_time'), '最近记录', '#801F2937', '#FF2F80ED'),
-          new TabBarOptions($r('app.media.user_dark'), '我的', '#801F2937', '#FF2F80ED')
+          new TabBarOptions($r('app.media.window'), '首页', '#374151', '#004B8D'),
+          new TabBarOptions($r('app.media.ic_public_time'), '最近记录', '#374151', '#004B8D'),
+          new TabBarOptions($r('app.media.user_dark'), '我的', '#374151', '#004B8D')
         ],
         tabBarPosition: TabBarPosition.BOTTOM,
-        barBackgroundColor: '#FAFFFFFF',
+        barBackgroundColor: '#FFFFFF',
         barOverlap: false,
         index: this.currentTabIndex,
         onChange: (index: number): void => {
