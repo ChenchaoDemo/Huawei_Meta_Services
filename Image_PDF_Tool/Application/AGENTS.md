@@ -105,17 +105,11 @@ generatePdf(
 - 优先使用系统 Picker 选择图片，不主动申请传统媒体读写权限
 - 生成文件先保存到应用沙箱目录
 - 用户点击保存时，使用系统文档保存 Picker
-- 不要把正式签名文件提交到仓库
-- 签名文件建议放在 `Application/signing/`
-- `Application/.gitignore` 必须忽略：
+- 签名文件放在 `Application/signing/`
+- 本仓库允许提交 `Application/signing/` 以及 `.p12`、`.p7b`、`.cer` 签名材料
+- 不要重新把签名材料加入 `.gitignore`，除非用户明确要求
 
-```gitignore
-/.codegenie
-signing/
-*.p12
-*.p7b
-*.cer
-```
+签名文件包含敏感材料，仅在受控仓库中保存和分发。
 
 ## 构建验证
 
@@ -142,5 +136,5 @@ signing/
 - 不要引入后端依赖
 - 不要新增与图片转 PDF 无关的功能
 - 不要删除旧云侧资源，除非用户明确要求
-- 不要提交 DevEco 生成的本地目录、缓存、签名文件
+- 不要提交 DevEco 生成的本地目录和缓存
 - 修改后优先跑构建验证

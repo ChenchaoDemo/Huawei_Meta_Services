@@ -4,15 +4,26 @@
       {
         "name": "default",
         "type": "HarmonyOS",
+        //测试环境的
         "material": {
-          "storeFile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/HarmonyOS.p12",
-          "storePassword": "00000018B184C764BA3B1AA3B27587935D03477CCF6540B431E2534AD62394EA24F2A698975AB471",
+          "storeFile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/debug/HarmonyOS.p12",
+          "storePassword": "00000018B3159B9BAF93D907139ADE873C9B6933947F4BC3A980AE02DFEDA47DB4E9F4DF7A05C85C",
           "keyAlias": "HarmonyOS",
-          "keyPassword": "00000018EE22B303628F87D68A0890A3FEA615A1FC5E79C2523EA56566F8767EB3169FD50C7BB9DB",
+          "keyPassword": "000000184800DDAEE3EF5A4508D2B4CC7ECFBCF0929EA68A568F3A3AD0EC7D57DAE8BFB66BA95A6F",
           "signAlg": "SHA256withECDSA",
-          "profile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/Release_proRelease.p7b",
-          "certpath": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/Release_Cert.cer"
-        }
+          "profile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/debug/Debug_proDebug.p7b",
+          "certpath": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/debug/Debug_Cert.cer"
+        },
+        //生产环境的
+//        "material": {
+//          "storeFile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/release/HarmonyOS.p12",
+//          "storePassword": "0000001896AEB2CBBEFF74151FB2DF01C2C1D099B79CA91F3BB6119BABD69933C20DB4DA06FD673A",
+//          "keyAlias": "HarmonyOS",
+//          "keyPassword": "00000018DAA2B10F2706FB838C43E721C401906C2B5D3D95FF2C7AD2B995FAD92579C05DF37E714C",
+//          "signAlg": "SHA256withECDSA",
+//          "profile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/release/Release_proRelease.p7b",
+//          "certpath": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/release/Release_Cert.cer"
+//        },
       }
     ],
     "products": [

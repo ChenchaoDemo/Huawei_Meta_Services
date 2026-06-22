@@ -21,4 +21,7 @@ Install Failed: error: failed to install bundle.
 code:9568322
 error: signature verification failed due to not trusted app source.
 View detailed instructions.
-# 就需要配置2套签名 
+#### 目前采用生产的方式 
+生成一套测试的对应的 Debug_Cert.cer 和 Debug_proDebug.p7b 文件 ，
+另外2个HarmonyOS和生产一样。
+在signingConfigs 中弄了2套代码，可以注释的方式来实现

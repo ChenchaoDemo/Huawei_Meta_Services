@@ -95,16 +95,7 @@ Application/
 "storeFile": "./signing/release.p12"
 ```
 
-注意：正式签名文件只用于本地构建和发布，不建议提交到 GitHub、Gitee 等远程仓库。
-
-建议在 `.gitignore` 中忽略：
-
-```gitignore
-signing/
-*.p12
-*.p7b
-*.cer
-```
+注意：本仓库选择提交 `Application/signing/` 下的签名材料，便于其他电脑直接构建和发布。签名文件包含敏感材料，请只在受控仓库中保存和分发。
 
 如果以后需要在其他电脑构建，不需要重新申请签名，只需要把同一套 `p12 / cer / p7b` 文件安全地复制到 `Application/signing/` 目录即可。已经上架的应用应尽量沿用同一套发布签名，否则可能影响后续版本更新。
 

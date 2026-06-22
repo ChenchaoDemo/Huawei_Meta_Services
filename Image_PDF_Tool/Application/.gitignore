@@ -11,7 +11,3 @@
 **/.test
 /.appanalyzer
 /.codegenie
-signing/
-*.p12
-*.p7b
-*.cer
