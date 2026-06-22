@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\56871\\.ohos\\config\\default_Application_I9NZe0_qO4OZ10MNgnFmhmnj1wYSZTixUj9a7YIBYF8=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BC79FDA74231DBDA96A4A6FF0C71A811E57422916770B994653C447FA4CA5D884304FC18ADEDAE1",
-          "profile": "C:\\Users\\56871\\.ohos\\config\\default_Application_I9NZe0_qO4OZ10MNgnFmhmnj1wYSZTixUj9a7YIBYF8=.p7b",
+          "storeFile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/HarmonyOS.p12",
+          "storePassword": "00000018B184C764BA3B1AA3B27587935D03477CCF6540B431E2534AD62394EA24F2A698975AB471",
+          "keyAlias": "HarmonyOS",
+          "keyPassword": "00000018EE22B303628F87D68A0890A3FEA615A1FC5E79C2523EA56566F8767EB3169FD50C7BB9DB",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\56871\\.ohos\\config\\default_Application_I9NZe0_qO4OZ10MNgnFmhmnj1wYSZTixUj9a7YIBYF8=.p12",
-          "storePassword": "0000001B8A1D2130D5CD17C8D2F4A64B28CBC8D7D06E664EAAB92FEEF1E462F36A9D0EEEB6653D8FF018C0"
+          "profile": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/Release_proRelease.p7b",
+          "certpath": "E:/github/HuaWei/Huawei_Meta_Services/Image_PDF_Tool/Application/signing/Release_Cert.cer"
         }
       }
     ],
@@ -36,6 +36,17 @@
       },
       {
         "name": "release"
+      }
+    ],
+    "capabilities": [
+      {
+        "bundleName": "com.atomicservice.6917608331379618002",
+        "config": [
+          {
+            "name": "Indoor high-precision positioning",
+            "capability": "com.huawei.service.indoorLocation"
+          }
+        ]
       }
     ]
   },
